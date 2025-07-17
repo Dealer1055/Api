@@ -9,13 +9,22 @@ from django.urls import path
 from django.contrib import admin
 from api.views import AuthorAPIView, GenreAPIView, BookAPIView
 
+schema_view = get_schema_view(
+   openapi.Info(
+      title="Kutubxona API",
+      default_version='v1',
+      description="Author, Genre, Book API hujjatlari",
+   ),
+   public=True,
+   permission_classes=(permissions.AllowAny,),
+)
+
 def home(request):
     return JsonResponse({"message": "Welcome to the API!"})
 
 urlpatterns = [
     path('admin/', admin.site.urls),
 
-    # CRUD'lar
     path('api/authors/', AuthorAPIView.as_view()),
     path('api/authors/<int:pk>/', AuthorAPIView.as_view()),
 
@@ -28,14 +37,3 @@ urlpatterns = [
     path('swagger/', schema_view.with_ui('swagger', cache_timeout=0), name='schema-swagger-ui'),
     path('redoc/', schema_view.with_ui('redoc', cache_timeout=0), name='schema-redoc'),
 ]
-
-schema_view = get_schema_view(
-   openapi.Info(
-      title="Kutubxona API",
-      default_version='v1',
-      description="Author, Genre, Book API hujjatlari",
-   ),
-   public=True,
-   permission_classes=(permissions.AllowAny,),
-)
-
